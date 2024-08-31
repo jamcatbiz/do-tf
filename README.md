@@ -1,6 +1,6 @@
 # AWS Terraform Action
 
-<!-- action-docs-all source="action.yml" project="aws-terraform-action" version="x.x.x" -->
+<!-- action-docs-all source="action.yml" project="jamcatbiz/do-tf" version="x.x.x" -->
 ## Description
 
 Assists in running various tofu workflows from GitHub Actions.
@@ -34,7 +34,7 @@ This action is a `composite` action.
 ## Usage
 
 ```yaml
-- uses: aws-terraform-action@x.x.x
+- uses: jamcatbiz/do-tf@x.x.x
   with:
     dir_path:
     # Path relative to root of repo for working tofu dir.
@@ -90,4 +90,4 @@ This action is a `composite` action.
     # Required: false
     # Default: ""
 ```
-<!-- action-docs-all source="action.yml" project="aws-terraform-action" version="x.x.x" -->
+<!-- action-docs-all source="action.yml" project="jamcatbiz/do-tf" version="x.x.x" -->
