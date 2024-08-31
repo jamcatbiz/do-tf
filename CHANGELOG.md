@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/jamcatbiz/do-tf/compare/v1.0.0...v1.1.0) (2024-08-31)
+
+
+### Features
+
+* **action:** adding multiple tf flavors for testing ([a0a4edb](https://github.com/jamcatbiz/do-tf/commit/a0a4edb9e9f2a8cc1fb25ea12bb1cec4b46992dc))
+* **action:** adding multiple tf flavors for testing ([53a360f](https://github.com/jamcatbiz/do-tf/commit/53a360f7577c2ff6d23aabda4ec3db0140ef2bb4))
+
 ## 1.0.0 (2024-08-31)
 
 
