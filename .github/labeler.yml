@@ -1,0 +1,21 @@
+docs:
+- changed-files:
+  - any-glob-to-any-file:
+    - examples/**
+    - "**/*.md"
+workflows:
+- changed-files:
+  - any-glob-to-any-file:
+    - .github/workflows/**
+action:
+- changed-files:
+  - any-glob-to-any-file:
+    - action.yml
+feature:
+- head-branch: ["^feature", "feature"]
+bug:
+- head-branch: ["^bug", "bug"]
+maintenance:
+- head-branch: ["^maintenance", "maintenance"]
+docs:
+- head-branch: ["^docs", "docs"]
