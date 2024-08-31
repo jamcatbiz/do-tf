@@ -1,0 +1,102 @@
+name: 'Tofu Action'
+description: 'Assists in running various tofu workflows from GitHub Actions.'
+inputs:
+  # REQUIRED
+  dir_path:
+    description: 'Path relative to root of repo for working tofu dir.'
+    type: string
+    required: true
+  vars:
+    description: 'Path relative to working tofu dir for `.tfvars` file.'
+    type: string
+    required: true
+  backend:
+    description: 'Path relative to working tofu dir for `.tfbackend` file.'
+    type: string
+    required: true
+  version:
+    description: 'Version of the tofu executable to install.'
+    type: string
+    required: true
+  # OPTIONAL
+  plan_only: 
+    description: 'Boolean for whether to only plan and not apply/destroy, default false'
+    type: boolean
+    required: true
+  destroy:
+    description: 'Boolean for whether to destroy or not, default false, meaning this action will apply by default.'
+    type: boolean
+    required: true
+  init_args:
+    description: '[Optional] Additional command line args. Useful for --backend-config and ephemeral or dynamic deploys.'
+    type: string
+    required: false
+    default: ''
+  plan_args: 
+    description: '[Optional] Additional command line args. Useful for --var-file and ephemeral or dynamic deploys.'
+    type: string
+    required: false
+    default: ''
+  plan_artifact_name:
+    description: '[Optional] Artifact name for plan file to use. If passed, then we jump straight to apply.'
+    type: string
+    required: false
+    default: ''
+outputs:
+  output:
+    description: 'Tofu outputs in -json format.'
+    value: ${{ steps.apply.outputs.output }}
+runs:
+  using: 'composite'
+  steps:
+  - uses: actions/checkout@v4
+  - uses: opentofu/setup-opentofu@v1
+    with:
+      tofu_wrapper: false
+  - id: plan
+    if: ${{ inputs.plan_artifact_name != '' }}
+    run: |
+      cd ${{ inputs.dir_path }}
+      tofu fmt -check -recursive
+      tofu init -input=false \
+        -backend-config=${{ inputs.backend }} \
+        ${{ inputs.init_args }}
+      tofu validate -no-color
+      tofu plan ${{ inputs.destroy && '-destroy' || '' }} \
+        -no-color -input=false -out=tfplan \
+        -var-file=${{ inputs.vars }} \
+        ${{ inputs.plan_args }}
+      tofu show -no-color tfplan > tofu.txt
+      {
+        echo "##### $(cat tofu.txt | grep --color=never -E '^[[:punct:]]|Plan')"
+        echo "<details><summary>:mag: Show Plan</summary>"
+        echo ""
+        echo "\`\`\`hcl"
+        echo "$(cat tofu.txt)"
+        echo "\`\`\`"
+        echo "</details>"
+      } >> $GITHUB_STEP_SUMMARY
+  - uses: actions/upload-artifact@v4
+    if: ${{ inputs.plan_artifact_name != '' }}
+    with:
+      name: ${{ format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
+      path: ${{ inputs.dir_path }}/tfplan
+      retention-days: 7
+  - uses: actions/download-artifact@v4
+    with:
+      name: ${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
+      path: ${{ inputs.dir_path }}
+  - id: apply
+    run: |
+      cd ${{ inputs.dir_path }}
+      tofu apply -no-color -input=false ${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
+      {
+        echo 'output<<EOF'
+        echo $(tofu output -json)
+        echo 'EOF'
+      } >> $GITHUB_OUTPUT
+      {
+        echo "|Name|Value|"
+        echo "|:-:|:-:|"
+        echo "$(tofu output -json | jq -r 'keys[] as $k | "|\`\($k)\`|\`\(.[$k].value)\`|"')"
+      } >> $GITHUB_STEP_SUMMARY
