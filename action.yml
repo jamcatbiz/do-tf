@@ -59,8 +59,15 @@ runs:
       exit 1
   - uses: actions/checkout@v4
   - uses: opentofu/setup-opentofu@v1
+    if: ${{ inputs.tf_flavor == 'tofu' }}
     with:
+      tofu_version: ${{ inputs.version }}
       tofu_wrapper: false
+    uses: hashicorp/setup-terraform@v3
+    if: ${{ inputs.tf_flavor == 'terraform' }}
+    with:
+      terraform_version: ${{ inputs.version }}
+      terraform_wrapper: false
   - id: plan
     if: ${{ inputs.plan_artifact_name != '' }}
     run: |

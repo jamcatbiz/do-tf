@@ -1,4 +1,4 @@
-# Do Tofu
+# Do Tofu or Terraform
 
 <!-- action-docs-all source="action.yml" project="jamcatbiz/do-tf" version="x.x.x" -->
 ## Description
