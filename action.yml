@@ -10,14 +10,6 @@ inputs:
     description: 'Path relative to root of repo for working tf dir.'
     type: string
     required: true
-  vars:
-    description: 'Path relative to working tf dir for `.tfvars` file.'
-    type: string
-    required: true
-  backend:
-    description: 'Path relative to working tf dir for `.tfbackend` file.'
-    type: string
-    required: true
   version:
     description: 'Version of the tf executable to install.'
     type: string
