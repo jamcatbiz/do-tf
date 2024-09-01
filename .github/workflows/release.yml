@@ -14,7 +14,6 @@ jobs:
       - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.MY_RELEASE_PLEASE_TOKEN }}
-          release-type: simple
       - uses: actions/checkout@v4
       - name: tag major and minor versions
         if: ${{ steps.release.outputs.release_created }}
