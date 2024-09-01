@@ -38,6 +38,9 @@ outputs:
   tf_output:
     description: 'tf outputs in -json format.'
     value: ${{ steps.apply.outputs.tf_output }}
+  plan_artifact_name: 
+    description: 'Name of the relevant tf plan artifact, either produced, consumed, or both.'
+    value: ${{ steps.artifact-name.outputs.plan_artifact_name }}
 runs:
   using: 'composite'
   steps:
@@ -74,22 +77,25 @@ runs:
         echo "\`\`\`"
         echo "</details>"
       } >> $GITHUB_STEP_SUMMARY
+  - id: artifact-name
+    run: |
+      echo 'plan_artifact_name="${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}"' >> $GITHUB_OUTPUT
   - uses: actions/upload-artifact@v4
     if: ${{ inputs.plan_artifact_name == '' }}
     with:
-      name: ${{ format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
+      name: ${{ steps.artifact-name.outputs.plan_artifact_name }}
       path: ${{ inputs.dir_path }}/tfplan
       retention-days: 7
   - uses: actions/download-artifact@v4
     if: ${{ inputs.plan_only == 'false' }}
     with:
-      name: ${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
+      name: ${{ steps.artifact-name.outputs.plan_artifact_name }}
       path: ${{ inputs.dir_path }}
   - id: apply
     if: ${{ inputs.plan_only == 'false' }}
     run: |
       cd ${{ inputs.dir_path }}
-      ${{ inputs.tf_flavor }} apply -no-color -input=false ${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
+      ${{ inputs.tf_flavor }} apply -no-color -input=false "${{ steps.artifact-name.outputs.plan_artifact_name }}"
       {
         echo 'tf_output<<EOF'
         echo $(${{ inputs.tf_flavor }} output -json)
