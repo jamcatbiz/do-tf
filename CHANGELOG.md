@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0 (2024-09-01)
+
+**Full Changelog**: https://github.com/jamcatbiz/do-tf/compare/v0.0.1...v0.1.0
+
 ## [1.1.0](https://github.com/jamcatbiz/do-tf/compare/v1.0.0...v1.1.0) (2024-08-31)
 
 
