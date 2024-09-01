@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/jamcatbiz/do-tf/compare/v0.2.0...v0.3.0) (2024-09-01)
+
+
+### Features
+
+* **action:** changing interface to be more user defined and less opinionated ([116dfdf](https://github.com/jamcatbiz/do-tf/commit/116dfdf55da164a99b6e78f3febc479f2267a23b))
+
 ## 0.2.0 (2024-09-01)
 
 **Full Changelog**: https://github.com/jamcatbiz/do-tf/compare/v0.1.0...v0.2.0
