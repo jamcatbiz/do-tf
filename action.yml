@@ -22,7 +22,6 @@ inputs:
     description: 'Version of the tf executable to install.'
     type: string
     required: true
-  # OPTIONAL
   plan_only: 
     description: 'Boolean for whether to only plan and not apply/destroy, default false'
     type: boolean
@@ -31,6 +30,7 @@ inputs:
     description: 'Boolean for whether to destroy or not, default false, meaning this action will apply by default.'
     type: boolean
     required: true
+  # OPTIONAL
   init_args:
     description: '[Optional] Additional command line args. Useful for --backend-config and ephemeral or dynamic deploys.'
     type: string
@@ -69,7 +69,7 @@ runs:
       terraform_version: ${{ inputs.version }}
       terraform_wrapper: false
   - id: plan
-    if: ${{ inputs.plan_artifact_name != '' }}
+    if: ${{ inputs.plan_artifact_name == '' }}
     run: |
       cd ${{ inputs.dir_path }}
       ${{ inputs.tf_flavor }} fmt -check -recursive
@@ -92,16 +92,18 @@ runs:
         echo "</details>"
       } >> $GITHUB_STEP_SUMMARY
   - uses: actions/upload-artifact@v4
-    if: ${{ inputs.plan_artifact_name != '' }}
+    if: ${{ inputs.plan_artifact_name == '' }}
     with:
       name: ${{ format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
       path: ${{ inputs.dir_path }}/tfplan
       retention-days: 7
   - uses: actions/download-artifact@v4
+    if: ${{ inputs.plan_only == 'false' }}
     with:
       name: ${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
       path: ${{ inputs.dir_path }}
   - id: apply
+    if: ${{ inputs.plan_only == 'false' }}
     run: |
       cd ${{ inputs.dir_path }}
       ${{ inputs.tf_flavor }} apply -no-color -input=false ${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
