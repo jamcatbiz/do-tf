@@ -15,11 +15,7 @@ inputs:
     type: string
     required: true
   plan_only: 
-    description: 'Boolean for whether to only plan and not apply/destroy, default false'
-    type: boolean
-    required: true
-  destroy:
-    description: 'Boolean for whether to destroy or not, default false, meaning this action will apply by default.'
+    description: 'Boolean for whether to only plan and not apply, default false'
     type: boolean
     required: true
   # OPTIONAL
@@ -39,9 +35,9 @@ inputs:
     required: false
     default: ''
 outputs:
-  output:
+  tf_output:
     description: 'tf outputs in -json format.'
-    value: ${{ steps.apply.outputs.output }}
+    value: ${{ steps.apply.outputs.tf_output }}
 runs:
   using: 'composite'
   steps:
@@ -65,14 +61,9 @@ runs:
     run: |
       cd ${{ inputs.dir_path }}
       ${{ inputs.tf_flavor }} fmt -check -recursive
-      ${{ inputs.tf_flavor }} init -input=false \
-        -backend-config=${{ inputs.backend }} \
-        ${{ inputs.init_args }}
+      ${{ inputs.tf_flavor }} init -input=false ${{ inputs.init_args }}
       ${{ inputs.tf_flavor }} validate -no-color
-      ${{ inputs.tf_flavor }} plan ${{ inputs.destroy && '-destroy' || '' }} \
-        -no-color -input=false -out=tfplan \
-        -var-file=${{ inputs.vars }} \
-        ${{ inputs.plan_args }}
+      ${{ inputs.tf_flavor }} plan -no-color -input=false -out=tfplan ${{ inputs.plan_args }}
       ${{ inputs.tf_flavor }} show -no-color tfplan > tf.txt
       {
         echo "##### $(cat tf.txt | grep --color=never -E '^[[:punct:]]|Plan')"
@@ -100,7 +91,7 @@ runs:
       cd ${{ inputs.dir_path }}
       ${{ inputs.tf_flavor }} apply -no-color -input=false ${{ inputs.plan_artifact_name != '' && inputs.plan_artifact_name || format('{0}-{1}-tfplan', inputs.dir_path, inputs.vars) }}
       {
-        echo 'output<<EOF'
+        echo 'tf_output<<EOF'
         echo $(${{ inputs.tf_flavor }} output -json)
         echo 'EOF'
       } >> $GITHUB_OUTPUT
