@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/jamcatbiz/do-tf/compare/v0.4.1...v0.4.2) (2024-09-02)
+
+
+### Bug Fixes
+
+* **action:** version typo ([2a3ad7f](https://github.com/jamcatbiz/do-tf/commit/2a3ad7fe4c2df5bd1116e9b863b2d60f4a50b545))
+
 ## [0.4.1](https://github.com/jamcatbiz/do-tf/compare/v0.4.0...v0.4.1) (2024-09-02)
 
 
