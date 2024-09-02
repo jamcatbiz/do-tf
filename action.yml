@@ -92,7 +92,7 @@ runs:
       name: ${{ steps.artifact-name.outputs.plan_artifact_name }}
       path: ${{ inputs.dir_path }}/tfplan
       retention-days: 7
-  - uses: actions/download-artifact@v4ye
+  - uses: actions/download-artifact@4
     if: ${{ inputs.plan_only == 'false' }}
     with:
       name: ${{ steps.artifact-name.outputs.plan_artifact_name }}
