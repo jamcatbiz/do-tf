@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.0](https://github.com/jamcatbiz/do-tf/compare/v0.3.0...v0.4.0) (2024-09-02)
+
+
+### Features
+
+* **action:** adding tf plan artifact name as output ([1c460ee](https://github.com/jamcatbiz/do-tf/commit/1c460ee3c0c5066db4dd30a4e581d0fee9b6b7b3))
+* **action:** fixing hashicorp install, updating doc ([127a523](https://github.com/jamcatbiz/do-tf/commit/127a523f6c7db8fc0a65d9fe432920dd6f43119b))
+
+
+### Bug Fixes
+
+* **action:** fixing some syntax issues ([5ef055a](https://github.com/jamcatbiz/do-tf/commit/5ef055ae627691e57e2b36ea2854d9df0ec004a3))
+
 ## [0.3.0](https://github.com/jamcatbiz/do-tf/compare/v0.2.0...v0.3.0) (2024-09-01)
 
 
