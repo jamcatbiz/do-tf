@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.3](https://github.com/jamcatbiz/do-tf/compare/v0.4.2...v0.4.3) (2024-09-23)
+
+
+### Bug Fixes
+
+* artifact names fixing and swapping to hash of plan ([4389c77](https://github.com/jamcatbiz/do-tf/commit/4389c77e50c7e60f89af043afe33cb5742122cab))
+
 ## [0.4.2](https://github.com/jamcatbiz/do-tf/compare/v0.4.1...v0.4.2) (2024-09-02)
 
 
