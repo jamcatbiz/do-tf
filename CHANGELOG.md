@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/jamcatbiz/do-tf/compare/v0.4.4...v0.5.0) (2024-09-23)
+
+
+### Features
+
+* using working-dir over cd, tfplan reference update ([c528f01](https://github.com/jamcatbiz/do-tf/commit/c528f0185b4f3bc5914a24a54b330a6ebe76f775))
+
 ## [0.4.4](https://github.com/jamcatbiz/do-tf/compare/v0.4.3...v0.4.4) (2024-09-23)
 
 
