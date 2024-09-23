@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.4](https://github.com/jamcatbiz/do-tf/compare/v0.4.3...v0.4.4) (2024-09-23)
+
+
+### Bug Fixes
+
+* fixing tfplan path reference ([fa41f33](https://github.com/jamcatbiz/do-tf/commit/fa41f332416579f76d16c3833c5b831b159963b7))
+
 ## [0.4.3](https://github.com/jamcatbiz/do-tf/compare/v0.4.2...v0.4.3) (2024-09-23)
 
 
