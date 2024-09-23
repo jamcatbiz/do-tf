@@ -61,15 +61,19 @@ runs:
     with:
       terraform_version: ${{ inputs.version }}
       terraform_wrapper: false
-  - name: Do tf plan workflow
-    id: plan
-    if: ${{ inputs.plan_artifact_name == '' }}
+  - name: fmt init validate
     shell: bash
+    working-directory: ${{ inputs.dir_path }}
     run: |
-      cd ${{ inputs.dir_path }}
       ${{ inputs.tf_flavor }} fmt -check -recursive
       ${{ inputs.tf_flavor }} init -input=false ${{ inputs.init_args }}
       ${{ inputs.tf_flavor }} validate -no-color
+  - name: plan
+    id: plan
+    if: ${{ inputs.plan_artifact_name == '' }}
+    shell: bash
+    working-directory: ${{ inputs.dir_path }}
+    run: |
       ${{ inputs.tf_flavor }} plan -no-color -input=false -out=tfplan ${{ inputs.plan_args }}
       ${{ inputs.tf_flavor }} show -no-color tfplan > tf.txt
       {
@@ -97,13 +101,14 @@ runs:
     with:
       name: ${{ steps.artifact-name.outputs.plan_artifact_name }}
       path: ${{ inputs.dir_path }}
-  - name: Do tf apply workflow
+  - name: apply
     id: apply
     if: ${{ inputs.plan_only == 'false' }}
     shell: bash
+    working-directory: ${{ inputs.dir_path }}
     run: |
-      cd ${{ inputs.dir_path }}
-      ${{ inputs.tf_flavor }} apply -no-color -input=false ${{ steps.artifact-name.outputs.plan_artifact_name }}
+      ${{ inputs.tf_flavor }} init -input=false ${{ inputs.init_args }}
+      ${{ inputs.tf_flavor }} apply -no-color -input=false tfplan
       {
         echo 'tf_output<<EOF'
         echo $(${{ inputs.tf_flavor }} output -json)
