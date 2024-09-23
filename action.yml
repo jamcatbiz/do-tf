@@ -103,7 +103,7 @@ runs:
     shell: bash
     run: |
       cd ${{ inputs.dir_path }}
-      ${{ inputs.tf_flavor }} apply -no-color -input=false "${{ steps.artifact-name.outputs.plan_artifact_name }}"
+      ${{ inputs.tf_flavor }} apply -no-color -input=false ${{ steps.artifact-name.outputs.plan_artifact_name }}
       {
         echo 'tf_output<<EOF'
         echo $(${{ inputs.tf_flavor }} output -json)
